@@ -1,5 +1,5 @@
 FROM node:slim
 
-WORKDIR /app
+# WORKDIR /app
 
-ENV HOST=0.0.0.0
+# ENV HOST=0.0.0.0
