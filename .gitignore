@@ -10,6 +10,9 @@
 !.yarn/cache
 #.pnp.*
 
+/node_modules
+/yarn-error.log
+
 cypress/screenshots
 cypress/videos
 dist
