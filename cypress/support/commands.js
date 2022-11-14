@@ -1,11 +1,15 @@
-import { STORAGE_KEY } from "../../app/constants"
+import { STORAGE_KEY } from "../../app/javascript/constants";
 
 Cypress.Commands.add("loadCardsIntoStorage", (cards) => {
   cy.window().then((window) => {
-    window.localStorage[STORAGE_KEY] = JSON.stringify(cards)
-  })
-})
+    window.localStorage[STORAGE_KEY] = JSON.stringify(cards);
+  });
+});
 
 Cypress.Commands.add("getTextAreaForLabel", (label) => {
-  return cy.contains("label", label).next().shadow().find("textarea")
-})
+  cy.contains("label", label).then(($label) => {
+    const labelFor = $label.attr("for");
+
+    return cy.get(`#${labelFor}`);
+  });
+});

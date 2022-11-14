@@ -14,7 +14,7 @@
 // ***********************************************************
 
 // Import commands.js using ES2015 syntax:
-import "./commands"
+import "./commands";
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
@@ -39,15 +39,27 @@ import "./commands"
  * */
 const arrayElements = (_chai, utils) => {
   function assertArrayElements(length, ...itemTexts) {
-    assert.equal(this._obj.length, length)
+    assert.equal(this._obj.length, length);
 
     itemTexts.forEach((itemText, i) => {
-      assert.include(this._obj.eq(i).text(), itemText)
-    })
+      assert.include(this._obj.eq(i).text(), itemText);
+    });
   }
 
-  _chai.Assertion.addMethod("arrayElements", assertArrayElements)
-}
+  _chai.Assertion.addMethod("arrayElements", assertArrayElements);
+};
 
 // registers our assertion function "isFoo" with Chai
-chai.use(arrayElements)
+chai.use(arrayElements);
+
+Cypress.on("uncaught:exception", (err, runnable) => {
+  if (err.message.match(/Error resolving module specifier “application”/)) {
+    return false;
+  }
+});
+
+// Cypress.on("uncaught:exception", (err, runnable) => {
+//   // returning false here prevents Cypress from
+//   // failing the test
+//   return false;
+// });

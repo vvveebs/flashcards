@@ -1,4 +1,4 @@
-import { STORAGE_KEY } from "../../app/constants"
+import { STORAGE_KEY } from "../../app/javascript/constants";
 
 it("Displays cards from localstorage on loading", () => {
   const cards = [
@@ -10,41 +10,41 @@ it("Displays cards from localstorage on loading", () => {
       frontText: "frontText2",
       backText: "backText2",
     },
-  ]
+  ];
 
   cy.window().then((window) => {
-    window.localStorage[STORAGE_KEY] = JSON.stringify(cards)
-  })
+    window.localStorage[STORAGE_KEY] = JSON.stringify(cards);
+  });
 
-  cy.visit("/")
+  cy.visit("/");
 
   cy.get("#cards li").should(
     "have.arrayElements",
     2,
     "frontText1 - backText1",
     "frontText2 - backText2"
-  )
-})
+  );
+});
 
 it("Saves cards to localstorage when added", () => {
-  const now = Date.now()
+  cy.visit("/");
 
-  cy.clock(now)
+  cy.contains("a", "Add New Card").click();
 
-  cy.visit("/")
+  cy.getTextAreaForLabel("Front Text").type("What is a cloud?");
+  cy.contains('input[type="submit"]', "Next").click();
 
-  cy.contains("Add New Card").click()
+  cy.getTextAreaForLabel("Back Text").type("Water vapour in the sky");
 
-  cy.getTextAreaForLabel("Front Text").type("What is a cloud?")
+  const now = Date.now();
 
-  cy.get("form").submit()
+  cy.clock(now);
 
-  cy.getTextAreaForLabel("Back Text").type("Water vapour in the sky")
-
-  cy.get("form").submit()
+  cy.contains('input[type="submit"]', "Create").click();
 
   cy.window().should((window) => {
-    expect(window.localStorage[STORAGE_KEY]).to.be.a("string").that.is.not.empty
+    expect(window.localStorage[STORAGE_KEY]).to.be.a("string").that.is.not
+      .empty;
 
     expect(JSON.parse(window.localStorage[STORAGE_KEY])).to.eql([
       {
@@ -52,9 +52,9 @@ it("Saves cards to localstorage when added", () => {
         backText: "Water vapour in the sky",
         createdAt: now,
       },
-    ])
-  })
-})
+    ]);
+  });
+});
 
 it("Saves cards to localstorage when deleted", () => {
   const cards = [
@@ -63,17 +63,17 @@ it("Saves cards to localstorage when deleted", () => {
       backText: "backText1",
       createdAt: Date.now(),
     },
-  ]
+  ];
 
   cy.window().then((window) => {
-    window.localStorage[STORAGE_KEY] = JSON.stringify(cards)
-  })
+    window.localStorage[STORAGE_KEY] = JSON.stringify(cards);
+  });
 
-  cy.visit("/")
+  cy.visit("/");
 
-  cy.get("#cards li").eq(0).contains("Delete").click()
+  cy.get("#cards li").eq(0).contains("Delete").click();
 
   cy.window().then((window) => {
-    expect(JSON.parse(window.localStorage[STORAGE_KEY])).to.be.empty
-  })
-})
+    expect(JSON.parse(window.localStorage[STORAGE_KEY])).to.be.empty;
+  });
+});
